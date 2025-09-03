@@ -3,18 +3,19 @@ package main
 import (
 	"go/go-fiber/config"
 	"go/go-fiber/internal/home"
-	"log"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/log"
 	"github.com/gofiber/fiber/v3/middleware/recover"
 )
 
 func main() {
 	config.Init()
-	dbConf := config.NewDatabaseConfig()
-	log.Println(dbConf)
+	config.NewDatabaseConfig()
+	logConfig := config.NewLogConfig()
 
 	app := fiber.New()
+	log.SetLevel(log.Level(logConfig.Level))
 	app.Use(recover.New())
 
 	home.NewHandler(app)
