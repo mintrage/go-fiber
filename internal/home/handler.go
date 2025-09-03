@@ -1,13 +1,13 @@
 package home
 
-import "github.com/gofiber/fiber/v3"
+import (
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/log"
+)
 
 type HomeHandler struct {
 	router fiber.Router
 }
-
-// /api/
-// /api/error
 
 func NewHandler(router fiber.Router) {
 	h := &HomeHandler{
@@ -23,5 +23,8 @@ func (h *HomeHandler) home(c fiber.Ctx) error {
 }
 
 func (h *HomeHandler) error(c fiber.Ctx) error {
+	log.Info("Info")
+	log.Debug("Debug")
+	log.Warn("Warn")
 	return c.SendString("Error")
 }
