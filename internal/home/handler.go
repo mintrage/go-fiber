@@ -1,20 +1,19 @@
 package home
 
 import (
-	"os"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 type HomeHandler struct {
-	router fiber.Router
+	router       fiber.Router
+	customLogger *zerolog.Logger
 }
 
-func NewHandler(router fiber.Router) {
+func NewHandler(router fiber.Router, customLogger *zerolog.Logger) {
 	h := &HomeHandler{
-		router: router,
+		router:       router,
+		customLogger: customLogger,
 	}
 	api := h.router.Group("/api")
 	api.Get("/", h.home)
@@ -26,12 +25,10 @@ func (h *HomeHandler) home(c *fiber.Ctx) error {
 }
 
 func (h *HomeHandler) error(c *fiber.Ctx) error {
-	log.Info().
+	h.customLogger.Info().
 		Bool("isAdmin", true).
 		Str("email", "a@a.ru").
 		Int("id", 10).
 		Msg("Info")
-	logger := zerolog.New(os.Stderr).With().Timestamp().Logger().Level(1)
-	logger.Info().Msg("Logger 2")
 	return c.SendString("Error")
 }
