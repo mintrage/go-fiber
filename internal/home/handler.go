@@ -1,8 +1,11 @@
 package home
 
 import (
+	"os"
+
 	"github.com/gofiber/fiber/v3"
-	"github.com/gofiber/fiber/v3/log"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 type HomeHandler struct {
@@ -23,8 +26,13 @@ func (h *HomeHandler) home(c fiber.Ctx) error {
 }
 
 func (h *HomeHandler) error(c fiber.Ctx) error {
-	log.Info("Info")
-	log.Debug("Debug")
-	log.Warn("Warn")
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	log.Info().
+		Bool("isAdmin", true).
+		Str("email", "a@a.ru").
+		Int("id", 10).
+		Msg("Info")
+	logger := zerolog.New(os.Stderr).With().Timestamp().Logger().Level(1)
+	logger.Info().Msg("Logger 2")
 	return c.SendString("Error")
 }
