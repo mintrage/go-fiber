@@ -21,7 +21,15 @@ func NewHandler(router fiber.Router, customLogger *zerolog.Logger) {
 }
 
 func (h *HomeHandler) home(c *fiber.Ctx) error {
-	data := struct{ Count int }{Count: 1}
+	data := struct {
+		Count   int
+		IsAdmin bool
+		CanUse  bool
+	}{
+		Count:   0,
+		IsAdmin: true,
+		CanUse:  true,
+	}
 	return c.Render("page", data)
 }
 
